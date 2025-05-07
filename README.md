@@ -16,7 +16,7 @@ Prepwize is a SaaS application that uses AI to generate mock interviews, provide
 
 ## 🔍 Preview
 
-![Preview](/public/preview.png)!
+![Preview](/public/preview.png)
 
 ## 🌐 View Live
 
