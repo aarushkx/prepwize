@@ -56,47 +56,48 @@ const Feedback = ({ params }: { params: Promise<{ interviewId: string }> }) => {
     const router = useRouter();
 
     useEffect(() => {
-        getFeedback();
-    }, []);
-
-    const getFeedback = async () => {
-        setIsLoading(true);
-        try {
-            const result = await db
-                .select()
-                .from(userAnswer)
-                .where(
-                    eq(
-                        userAnswer.mockIdRef,
-                        resolvedParams?.interviewId as string
+        const getFeedback = async () => {
+            setIsLoading(true);
+            try {
+                const result = await db
+                    .select()
+                    .from(userAnswer)
+                    .where(
+                        eq(
+                            userAnswer.mockIdRef,
+                            resolvedParams?.interviewId as string
+                        )
                     )
-                )
-                .orderBy(userAnswer.id);
+                    .orderBy(userAnswer.id);
 
-            setFeedback(result);
-            setOpenItems(
-                result.reduce(
-                    (acc, _, index) => ({ ...acc, [index]: false }),
-                    {}
-                )
-            );
-
-            if (result.length > 0) {
-                const totalRating = result.reduce((sum, item) => {
-                    const numRating = item.rating ? parseFloat(item.rating) : 0;
-                    return isNaN(numRating) ? sum : sum + numRating;
-                }, 0);
-
-                setOverallRating(
-                    Math.round((totalRating / result.length) * 10) / 10
+                setFeedback(result);
+                setOpenItems(
+                    result.reduce(
+                        (acc, _, index) => ({ ...acc, [index]: false }),
+                        {}
+                    )
                 );
+
+                if (result.length > 0) {
+                    const totalRating = result.reduce((sum, item) => {
+                        const numRating = item.rating
+                            ? parseFloat(item.rating)
+                            : 0;
+                        return isNaN(numRating) ? sum : sum + numRating;
+                    }, 0);
+
+                    setOverallRating(
+                        Math.round((totalRating / result.length) * 10) / 10
+                    );
+                }
+            } catch (error: any) {
+                toast.error(error.message || "Could not fetch feedback");
+            } finally {
+                setIsLoading(false);
             }
-        } catch (error: any) {
-            toast.error(error.message || "Could not fetch feedback");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+        getFeedback();
+    }, [resolvedParams?.interviewId]);
 
     const toggleItem = (index: number) => {
         setOpenItems((prev) => ({

@@ -160,7 +160,11 @@ const Analytics = () => {
 
                     const current = monthlyPerformanceMap.get(yearMonthKey);
                     if (current) {
-                        isCorrect ? current.correct++ : current.incorrect++;
+                        if (isCorrect) {
+                            current.correct++;
+                        } else {
+                            current.incorrect++;
+                        }
                         monthlyPerformanceMap.set(yearMonthKey, current);
                     }
                 }

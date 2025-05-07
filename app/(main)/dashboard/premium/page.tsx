@@ -26,8 +26,9 @@ const Premium = () => {
             </Card>
 
             <p className="text-muted-foreground mt-4 max-w-md">
-                We're working on enhancing your experience. In the meantime,
-                please continue enjoying our currently available features.
+                We&apos;re working on enhancing your experience. In the
+                meantime, please continue enjoying our currently available
+                features.
             </p>
         </div>
     );

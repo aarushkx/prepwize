@@ -62,15 +62,6 @@ const RecordAnswerSection = ({
     const router = useRouter();
     const { user } = useUser();
 
-    useEffect(() => {
-        setAnswer("");
-        setInterimResult("");
-        setHasSubmitted(false);
-        stopRecognition();
-
-        questionInstanceIdRef.current = `question-${activeQuestionIndex}-${Date.now()}`;
-    }, [activeQuestionIndex, interviewData.mockId]);
-
     const initRecognition = useCallback(() => {
         if (
             !("webkitSpeechRecognition" in window) &&
@@ -154,6 +145,15 @@ const RecordAnswerSection = ({
         }
         setIsRecording(false);
     }, []);
+
+    useEffect(() => {
+        setAnswer("");
+        setInterimResult("");
+        setHasSubmitted(false);
+        stopRecognition();
+
+        questionInstanceIdRef.current = `question-${activeQuestionIndex}-${Date.now()}`;
+    }, [activeQuestionIndex, interviewData.mockId, stopRecognition]);
 
     const toggleRecording = useCallback(() => {
         if (isRecording) {

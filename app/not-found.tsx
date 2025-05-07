@@ -35,7 +35,8 @@ const NotFound = () => {
 
                 <p className="text-xl text-muted-foreground mb-8">
                     Hmm... Looks like this page got nervous and left the
-                    interview early. Don't worry - we'll get you ready.
+                    interview early. Don&apos;t worry - we&apos;ll get you
+                    ready.
                 </p>
 
                 <div className="flex flex-col sm:flex-row justify-center gap-4">

@@ -18,28 +18,27 @@ const StartPage = () => {
     const params = useParams();
 
     useEffect(() => {
+        const getInterviewData = async () => {
+            try {
+                setIsLoading(true);
+                const result = await db
+                    .select()
+                    .from(interview)
+                    .where(eq(interview.mockId, params?.interviewId as string));
+
+                if (!result.length) throw new Error("Interview not found");
+
+                const jsonResponse = JSON.parse(result[0].jsonResponse);
+                setInterviewQuestion(jsonResponse);
+                setInterviewData(result[0]);
+            } catch (error: any) {
+                toast.error(error.message || "Failed to load interview");
+            } finally {
+                setIsLoading(false);
+            }
+        };
         getInterviewData();
-    }, []);
-
-    const getInterviewData = async () => {
-        try {
-            setIsLoading(true);
-            const result = await db
-                .select()
-                .from(interview)
-                .where(eq(interview.mockId, params?.interviewId as string));
-
-            if (!result.length) throw new Error("Interview not found");
-
-            const jsonResponse = JSON.parse(result[0].jsonResponse);
-            setInterviewQuestion(jsonResponse);
-            setInterviewData(result[0]);
-        } catch (error: any) {
-            toast.error(error.message || "Failed to load interview");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    }, [params?.interviewId]);
 
     const goToNextQuestion = () => {
         if (

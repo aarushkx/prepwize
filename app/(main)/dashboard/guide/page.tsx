@@ -128,9 +128,10 @@ const Guide = () => {
                                 Detailed Feedback
                             </h3>
                             <p className="text-muted-foreground">
-                                After completing your interview, you'll receive
-                                a comprehensive feedback report with ratings and
-                                suggested improvements for each question.
+                                After completing your interview, you&apos;ll
+                                receive a comprehensive feedback report with
+                                ratings and suggested improvements for each
+                                question.
                             </p>
                         </div>
                     </div>

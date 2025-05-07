@@ -20,29 +20,28 @@ const InterviewPage = () => {
     const router = useRouter();
 
     useEffect(() => {
+        const getInterviewData = async () => {
+            try {
+                setIsLoading(true);
+
+                const result = await db
+                    .select()
+                    .from(interview)
+                    .where(eq(interview.mockId, params?.interviewId as string));
+                setInterviewData(result[0]);
+            } catch (error: any) {
+                toast.error(error.message || "Something went wrong");
+            } finally {
+                setIsLoading(false);
+            }
+        };
         getInterviewData();
-    }, []);
-
-    const getInterviewData = async () => {
-        try {
-            setIsLoading(true);
-
-            const result = await db
-                .select()
-                .from(interview)
-                .where(eq(interview.mockId, params?.interviewId as string));
-            setInterviewData(result[0]);
-        } catch (error: any) {
-            toast.error(error.message || "Something went wrong");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    }, [params?.interviewId]);
 
     return (
         <div className="container mx-auto px-4 py-6">
             <h2 className="text-2xl font-bold text-center mb-8">
-                Let's get started
+                Let&apos;s get started
             </h2>
 
             <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start justify-center">
