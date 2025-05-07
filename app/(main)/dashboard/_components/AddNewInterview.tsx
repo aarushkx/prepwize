@@ -24,8 +24,6 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { interviewPrompt } from "@/utils/promts";
-import { chatSession } from "@/services/ai-service";
 import { Loader2 } from "lucide-react";
 import { db } from "@/db/db";
 import { v4 as uuidv4 } from "uuid";
@@ -144,18 +142,18 @@ const AddNewInterview = () => {
             const numOfQuestions =
                 Number(process.env.NEXT_PUBLIC_NUM_OF_INTERVIEW_QUESTIONS) || 5;
 
-            const INPUT_PROMPT = interviewPrompt({
-                jobPosition,
-                jobDescription,
-                jobExperience,
-                numOfQuestions,
+            const response = await fetch("/api/interview/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    jobPosition,
+                    jobDescription,
+                    jobExperience,
+                    numOfQuestions,
+                }),
             });
-
-            const rawResponse = await chatSession.sendMessage(INPUT_PROMPT);
-            const aiResponse = rawResponse.response
-                .text()
-                .replace("```json", "")
-                .replace("```", "");
+            const data = await response.json();
+            const aiResponse = data.result;
 
             if (aiResponse) {
                 const newInterview = await db

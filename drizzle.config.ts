@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
 import dotenv from "dotenv";
 
@@ -11,6 +10,6 @@ export default defineConfig({
     schema: "./db/schema.ts",
     dialect: "postgresql",
     dbCredentials: {
-        url: process.env.NEONDB_URL!,
+        url: process.env.NEXT_PUBLIC_NEONDB_URL!,
     },
 });

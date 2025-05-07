@@ -17,7 +17,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { feedbackPrompt } from "@/utils/promts";
-import { chatSession } from "@/services/ai-service";
 import { db } from "@/db/db";
 import { userAnswer } from "@/db/schema";
 import { useUser } from "@clerk/nextjs";
@@ -178,13 +177,19 @@ const RecordAnswerSection = ({
                 activeQuestionIndex,
             });
 
-            const rawResponse = await chatSession.sendMessage(FEEDBACK_PROMPT);
-            const aiFeedbackResponse = rawResponse.response
-                .text()
-                .replace("```json", "")
-                .replace("```", "");
+            const response = await fetch("/api/interview/feedback", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ prompt: FEEDBACK_PROMPT }),
+            });
 
-            console.log("aiResponse:", aiFeedbackResponse);
+            if (!response.ok) {
+                toast.error("Failed to save answer");
+            }
+
+            const { response: aiFeedbackResponse } = await response.json();
             const feedbackJsonResponse = JSON.parse(aiFeedbackResponse);
 
             const userAnswerRecord = await db.insert(userAnswer).values({
